@@ -31,7 +31,8 @@ class JaegerPropagator implements PropagatorInterface
     const DEFAULT_HEADER = 'uber-trace-id';
 
     // refer: https://www.jaegertracing.io/docs/1.18/client-libraries/#propagation-format
-    const CONTEXT_HEADER_FORMAT = '%016x:%016x:%016x:%x';
+
+    const CONTEXT_HEADER_FORMAT = '%016s:%016s:%016s:%x';    //traceId, spanId are stored as hex strings in opencensus
 
     /**
      * @var FormatterInterface
@@ -84,6 +85,10 @@ class JaegerPropagator implements PropagatorInterface
     public function inject(SpanContext $context, HeaderSetter $setter)
     {
         $traceId = $context->traceId();
+        if(strlen($traceId) > 16){
+            $traceId = substr($traceId, 16);
+        }
+
         $spanId = $context->spanId();
         $parentID = ''; // this is deprecated anyway
         $enabled = $context->enabled();
