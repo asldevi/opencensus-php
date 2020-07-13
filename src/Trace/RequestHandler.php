@@ -274,7 +274,7 @@ class RequestHandler
                 'spanId' => $this->rootSpan->spanId()
             ]);
             if ($responseCode >= 400) {
-                $this->tracer->addAttribute('error', True, [
+                $this->tracer->addAttribute('error', 'true', [
                     'spanId' => $this->rootSpan->spanId()
                 ]);
             }
